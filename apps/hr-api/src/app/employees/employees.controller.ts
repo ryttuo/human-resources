@@ -30,4 +30,9 @@ export class EmployeesController {
   async deleteEmployee(@Param('id') id: number): Promise<Employee> {
     return this.employeesService.deleteEmployee(+id);
   }
+
+  @Get(':id/departments-history')
+  async getEmployeeDepartmentsHistory(@Param('id') id: number) {
+    return this.employeesService.getEmployeeDepartmentHistory(+id);
+  }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/prisma/prisma.service';
-import { employees as Employee } from '@prisma/client';
+import { employees as Employee, departmenthistory as DepartmentHistory } from '@prisma/client';
 
 @Injectable()
 export class EmployeesService {
@@ -34,5 +34,19 @@ export class EmployeesService {
 
   async deleteEmployee(id: number): Promise<Employee> {
     return this.prisma.employees.delete({ where: { id } });
+  }
+
+  async getEmployeeDepartmentHistory(id: number): Promise<(DepartmentHistory & { departments: { name: string } })[]> {
+    return this.prisma.departmenthistory.findMany({
+      where: { employee_id: id },
+      orderBy: { changed_at: 'desc' },
+      include: {
+        departments: {
+          select: {
+            name: true
+          }
+        }
+      }
+    });
   }
 }
