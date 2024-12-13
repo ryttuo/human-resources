@@ -63,6 +63,11 @@
         "style": "tailwind",
         "linter": "none"
       }
+    },
+    "@nx/react": {
+      "library": {
+        "unitTestRunner": "none"
+      }
     }
   }
 }

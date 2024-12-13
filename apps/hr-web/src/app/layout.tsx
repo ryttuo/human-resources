@@ -12,5 +12,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <RootLayoutClient>{children}</RootLayoutClient>;
+  return (
+    <RootLayoutClient>
+      <div className="max-w-[768px] mx-auto">{children}</div>
+    </RootLayoutClient>
+  );
 }
