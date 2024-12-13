@@ -21,7 +21,15 @@ export class EmployeesService {
   }
 
   async getEmployees(): Promise<Employee[]> {
-    return this.prisma.employees.findMany();
+    return this.prisma.employees.findMany({
+      include: {
+        departments: {
+          select: {
+            name: true
+          }
+        }
+      }
+    });
   }
 
   async getEmployeeById(id: number): Promise<Employee | null> {

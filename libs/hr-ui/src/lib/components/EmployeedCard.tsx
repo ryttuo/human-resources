@@ -8,6 +8,7 @@ interface Employee {
   fullName: string;
   imageUrl: string;
   hireDate: string;
+  department: string;
 }
 
 interface EmployeeCardProps {
@@ -37,23 +38,38 @@ export const EmployeeCard: React.FC<EmployeeCardProps> = ({ employee }) => {
             src={employee.imageUrl}
             alt={employee.fullName}
             fill
+            sizes="(max-width: 64px) 100vw, 64px"
             className="rounded-full object-cover"
           />
         </div>
         <div className="flex-1">
-          <h3 className="text-lg font-semibold">{employee.fullName}</h3>
+          <h3 className="text-lg font-semibold">{employee.fullName} <span className="text-sm text-gray-500">({employee.department})</span></h3>
           <div className="mt-1 text-sm text-gray-500">
             <span>Hired: {format(hireDate, 'MMMM d, yyyy')}</span>
             <span className="ml-2">({tenure})</span>
           </div>
         </div>
-        <Button
+        <div className="flex gap-2">
+          <Button
             variant="primary"
             className="mt-2"
             onClick={handleClick}
           >
             View Details
           </Button>
+          <Button
+            variant="secondary" 
+            className="mt-2"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              // Handle close action
+              console.log('Delete clicked');
+            }}
+          >
+            Delete
+          </Button>
+        </div>
       </div>
     </div>
   );
