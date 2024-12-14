@@ -7,7 +7,7 @@ import {
   Department,
   DepartmentHistory,
 } from '@hr-app/hr-services';
-import { Button, Avatar } from '@hr-app/hr-ui';
+import { Button, Avatar, Title } from '@hr-app/hr-ui';
 import { useRouter } from 'next/navigation';
 
 export default function EmployeePage({ params }: { params: { id: string } }) {
@@ -88,10 +88,10 @@ export default function EmployeePage({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Employee Details</h1>
+    <div>
+      <Title name="Employee Details" />
 
-      <div className="bg-white rounded-lg shadow p-6 mb-6">
+      <section className="bg-white rounded-lg shadow p-6 mb-6">
         <div className="flex justify-between items-start mb-4">
           <h2 className="text-xl font-semibold">Personal Information</h2>
           <div className="relative">
@@ -104,7 +104,11 @@ export default function EmployeePage({ params }: { params: { id: string } }) {
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <Avatar fullName={employee.first_name} status={employee.status} imageUrl="/imgs/profile.jpeg" />
+          <Avatar
+            fullName={employee.first_name}
+            status={employee.status}
+            imageUrl="/imgs/profile.jpeg"
+          />
           <div>
             <p className="font-medium">Name</p>
             <p>
@@ -156,14 +160,14 @@ export default function EmployeePage({ params }: { params: { id: string } }) {
             </div>
           </div>
           <div className="mt-2 flex justify-end items-center">
-              <Button variant="secondary" onClick={handleBack}>
-                Back
-              </Button>
-            </div>
+            <Button variant="secondary" onClick={handleBack}>
+              Back
+            </Button>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div className="bg-white rounded-lg shadow p-6">
+      <section className="bg-white rounded-lg shadow p-6">
         <h2 className="text-xl font-semibold mb-4">Department History</h2>
         <div className="space-y-4">
           {departmentHistory.map((history, index) => (
@@ -175,7 +179,7 @@ export default function EmployeePage({ params }: { params: { id: string } }) {
             </div>
           ))}
         </div>
-      </div>
+      </section>
     </div>
   );
 }

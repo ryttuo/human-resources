@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, EmployeeCard, Modal } from '@hr-app/hr-ui';
+import { Button, EmployeeCard, Modal, Title } from '@hr-app/hr-ui';
 import { useEffect, useState } from 'react';
 import { ApiService, Employee, Department } from '@hr-app/hr-services';
 import { useRouter } from 'next/navigation';
@@ -19,8 +19,8 @@ export default function EmployeesPage() {
     address: '',
     status: '',
     departments: {
-      name: ''
-    }
+      name: '',
+    },
   });
 
   const [departments, setDepartments] = useState<Department[]>([]);
@@ -34,7 +34,7 @@ export default function EmployeesPage() {
       phone: '',
       address: '',
       status: '',
-      departments: { name: '' }
+      departments: { name: '' },
     });
   };
 
@@ -43,7 +43,7 @@ export default function EmployeesPage() {
       try {
         const [employeesData, departmentsData] = await Promise.all([
           apiService.getEmployees(),
-          apiService.getDepartments()
+          apiService.getDepartments(),
         ]);
         setEmployees(employeesData);
         setDepartments(departmentsData);
@@ -55,11 +55,15 @@ export default function EmployeesPage() {
     fetchData();
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === 'hire_date' ? new Date(value) : value
+      [name]: name === 'hire_date' ? new Date(value) : value,
     }));
   };
 
@@ -76,9 +80,10 @@ export default function EmployeesPage() {
 
   return (
     <div>
-      <h1 className="text-center font-bold mt-4 uppercase text-xl">Employees</h1>
+      <Title name="Employees" />
+      
       <section>
-        <div className="flex flex-col items-end pr-4">
+        <div className="flex flex-col items-end mb-4">
           <Button
             variant="primary"
             onClick={(e) => {
@@ -92,7 +97,7 @@ export default function EmployeesPage() {
             New employee
           </Button>
         </div>
-        <div className="flex flex-col justify-center p-4 gap-4">
+        <div className="flex flex-col justify-center gap-4">
           {employees.map((employee) => (
             <EmployeeCard
               key={employee.id}
@@ -101,15 +106,17 @@ export default function EmployeesPage() {
                 fullName: `${employee.first_name} ${employee.last_name}`,
                 hireDate: new Date(employee.hire_date).toISOString(),
                 department: employee.departments.name,
-                status: employee.status
+                status: employee.status,
               }}
               onViewDetails={() => {
                 router.push(`/employee/${employee.id}`);
               }}
               onDelete={async () => {
-                const confirmed = window.confirm(`Are you sure you want to delete ${employee.first_name} ${employee.last_name}?`);
+                const confirmed = window.confirm(
+                  `Are you sure you want to delete ${employee.first_name} ${employee.last_name}?`
+                );
                 if (!confirmed) return;
-                
+
                 try {
                   await apiService.deleteEmployee(employee.id);
                   const employeesData = await apiService.getEmployees();
@@ -125,13 +132,14 @@ export default function EmployeesPage() {
       </section>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        
         <h2 className="text-xl font-bold mb-4">Add New Employee</h2>
         <div>
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit();
-          }}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
+          >
             <input
               type="text"
               name="first_name"
@@ -142,7 +150,7 @@ export default function EmployeesPage() {
               required
             />
             <input
-              type="text" 
+              type="text"
               name="last_name"
               placeholder="Last Name"
               value={formData.last_name}
@@ -188,17 +196,12 @@ export default function EmployeesPage() {
               className="border border-gray-300 rounded px-3 py-2 w-full mb-4"
               rows={3}
             />
-            <Button
-              variant="primary"
-              type="submit"
-            >
+            <Button variant="primary" type="submit">
               Save
             </Button>
           </form>
         </div>
       </Modal>
-
-
     </div>
   );
 }
