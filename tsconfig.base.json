@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@hr-app/hr-services": ["libs/hr-services/src/index.ts"],
-      "@hr-app/hr-ui": ["libs/hr-ui/src/index.ts"]
+      "@hr-app/hr-ui": ["libs/hr-ui/src/index.ts"],
+      "@hr-app/shared-types": ["libs/shared-types/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -2,8 +2,9 @@
 
 import { Button, EmployeeCard, Modal, Title } from '@hr-app/hr-ui';
 import { useEffect, useState } from 'react';
-import { ApiService, Employee, Department } from '@hr-app/hr-services';
+import { ApiService } from '@hr-app/hr-services';
 import { useRouter } from 'next/navigation';
+import { Employee, Department } from '@hr-app/shared-types';
 
 export default function EmployeesPage() {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function EmployeesPage() {
     department_id: '',
     phone: '',
     address: '',
-    status: '',
+    status: 'ACTIVE',
     departments: {
       name: '',
     },
@@ -69,7 +70,7 @@ export default function EmployeesPage() {
 
   const handleSubmit = async () => {
     try {
-      await apiService.createEmployee(formData);
+      await apiService.createEmployee({ ...formData, status: 'ACTIVE' });
       setIsModalOpen(false);
       const employeesData = await apiService.getEmployees();
       setEmployees(employeesData);
@@ -81,7 +82,7 @@ export default function EmployeesPage() {
   return (
     <div>
       <Title name="Employees" />
-      
+
       <section>
         <div className="flex flex-col items-end mb-4">
           <Button

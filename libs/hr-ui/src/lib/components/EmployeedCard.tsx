@@ -33,7 +33,7 @@ export const EmployeeCard: React.FC<EmployeeCardProps> = ({ employee, onViewDeta
         <div className="flex-1">
           <h3 className="text-lg font-semibold">{employee.fullName} <span className="text-sm text-gray-500">({employee.department})</span></h3>
           <div className="mt-1 text-sm text-gray-500">
-            <span>Hired: {format(hireDate, 'MMMM d, yyyy')}</span>
+            <span>Hired: {format(new Date(hireDate).toLocaleDateString('en-US', { timeZone: 'GMT' }), 'MMMM d, yyyy')}</span>
             <span className="ml-2">({tenure})</span>
           </div>
         </div>

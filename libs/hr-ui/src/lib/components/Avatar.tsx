@@ -11,7 +11,7 @@ export const Avatar: React.FC<AvatarProps> = ({ fullName, status, imageUrl }) =>
   return (
     <div className="relative h-16 w-16">
       {status !== 'ACTIVE' && (
-        <div className="absolute -top-2 -right-2 z-10 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+        <div className="absolute top-14 right-[5px] z-10 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
           Inactive
         </div>
       )}

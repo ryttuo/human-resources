@@ -1,14 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import {
-  ApiService,
-  Employee,
-  Department,
-  DepartmentHistory,
-} from '@hr-app/hr-services';
+import { ApiService } from '@hr-app/hr-services';
 import { Button, Avatar, Title } from '@hr-app/hr-ui';
 import { useRouter } from 'next/navigation';
+import { Employee, Department, DepartmentHistory } from '@hr-app/shared-types';
+import { format } from 'date-fns';
 
 export default function EmployeePage({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -125,7 +122,9 @@ export default function EmployeePage({ params }: { params: { id: string } }) {
           </div>
           <div>
             <p className="font-medium">Hire Date</p>
-            <p>{new Date(employee.hire_date).toLocaleDateString()}</p>
+            <p>
+              {format(new Date(employee.hire_date).toLocaleDateString('en-US', { timeZone: 'GMT' }), 'MMMM d, yyyy')}
+            </p>
           </div>
           <div>
             <p className="font-medium">Status</p>
