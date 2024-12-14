@@ -1,4 +1,4 @@
-import Button from './Button';
+import { Button } from './Button';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { format, differenceInYears, differenceInMonths, differenceInDays } from 'date-fns';

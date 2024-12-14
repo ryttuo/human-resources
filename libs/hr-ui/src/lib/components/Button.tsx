@@ -1,21 +1,24 @@
 import React from 'react';
 
 export interface ButtonProps {
-  onClick: (e: React.MouseEvent) => void;
+  onClick?: (e: React.MouseEvent) => void;
   children?: React.ReactNode;
   variant?: 'primary' | 'secondary';
   className?: string;
+  type?: 'button' | 'submit' | 'reset';
 }
 
-const Button: React.FC<ButtonProps> = ({
+export const Button: React.FC<ButtonProps> = ({
   onClick, 
   children,
   variant = 'primary',
-  className = ''
+  className = '',
+  type = 'button'
 }) => {
   return (
     <button 
       onClick={onClick} 
+      type={type}
       className={`${
         variant === 'primary'
           ? 'bg-green-200 text-green-700 hover:bg-green-300'
@@ -28,5 +31,3 @@ const Button: React.FC<ButtonProps> = ({
     </button>
   );
 };
-
-export default Button;
