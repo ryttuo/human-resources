@@ -19,6 +19,16 @@ export interface Department {
   name: string;
 }
 
+export interface DepartmentHistory {
+  id: string;
+  department_id: string;
+  name: string;
+  changed_at: Date;
+  departments: {
+    name: string;
+  };
+}
+
 export class ApiService {
   private axiosInstance: AxiosInstance;
 
@@ -78,5 +88,9 @@ export class ApiService {
 
   async getDepartments() {
     return this.get<Department[]>('/departments');
+  }
+
+  async getDepartmentHistory(id: string) {
+    return this.get<DepartmentHistory[]>(`/employees/${id}/departments-history`);
   }
 }

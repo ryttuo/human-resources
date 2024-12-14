@@ -17,7 +17,7 @@ export class CreateEmployeeDto {
   department_id: number;
 
   @IsString()
-  @IsOptional() 
+  @IsOptional()
   phone?: string;
 
   @IsString()
@@ -27,4 +27,15 @@ export class CreateEmployeeDto {
   @IsString()
   @IsOptional()
   status?: string;
-} 
+}
+
+export class UpdateEmployeeDto {
+  @IsInt()
+  @IsOptional()
+  @Transform(({ value }) => parseInt(value, 10))
+  department_id?: number;
+
+  @IsString()
+  @IsOptional()
+  status?: string;
+}
