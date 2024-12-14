@@ -7,8 +7,7 @@ import {
   Department,
   DepartmentHistory,
 } from '@hr-app/hr-services';
-import { Button } from '@hr-app/hr-ui';
-import Image from 'next/image';
+import { Button, Avatar } from '@hr-app/hr-ui';
 import { useRouter } from 'next/navigation';
 
 export default function EmployeePage({ params }: { params: { id: string } }) {
@@ -105,20 +104,7 @@ export default function EmployeePage({ params }: { params: { id: string } }) {
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <div className="relative h-16 w-16">
-            {employee.status !== 'ACTIVE' && (
-              <div className="absolute -top-2 -right-2 z-10 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
-                Inactive
-              </div>
-            )}
-            <Image
-              src="/imgs/profile.jpeg"
-              alt={employee.first_name}
-              fill
-              sizes="(max-width: 64px) 100vw, 64px"
-              className="rounded-full object-cover"
-            />
-          </div>
+          <Avatar fullName={employee.first_name} status={employee.status} imageUrl="/imgs/profile.jpeg" />
           <div>
             <p className="font-medium">Name</p>
             <p>

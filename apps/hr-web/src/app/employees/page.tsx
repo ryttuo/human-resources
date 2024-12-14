@@ -3,8 +3,10 @@
 import { Button, EmployeeCard, Modal } from '@hr-app/hr-ui';
 import { useEffect, useState } from 'react';
 import { ApiService, Employee, Department } from '@hr-app/hr-services';
+import { useRouter } from 'next/navigation';
 
 export default function EmployeesPage() {
+  const router = useRouter();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const apiService = new ApiService();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -97,9 +99,25 @@ export default function EmployeesPage() {
               employee={{
                 id: employee.id,
                 fullName: `${employee.first_name} ${employee.last_name}`,
-                imageUrl: "/imgs/profile.jpeg",
                 hireDate: new Date(employee.hire_date).toISOString(),
-                department: employee.departments.name
+                department: employee.departments.name,
+                status: employee.status
+              }}
+              onViewDetails={() => {
+                router.push(`/employee/${employee.id}`);
+              }}
+              onDelete={async () => {
+                const confirmed = window.confirm(`Are you sure you want to delete ${employee.first_name} ${employee.last_name}?`);
+                if (!confirmed) return;
+                
+                try {
+                  await apiService.deleteEmployee(employee.id);
+                  const employeesData = await apiService.getEmployees();
+                  setEmployees(employeesData);
+                } catch (error) {
+                  console.error('Error deleting employee:', error);
+                  alert('Failed to delete employee. Please try again.');
+                }
               }}
             />
           ))}

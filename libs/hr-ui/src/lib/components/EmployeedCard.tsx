@@ -1,22 +1,22 @@
 import { Button } from './Button';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import { Avatar } from './Avatar';
 import { format, differenceInYears, differenceInMonths, differenceInDays } from 'date-fns';
 
 interface Employee {
   id: string;
   fullName: string;
-  imageUrl: string;
   hireDate: string;
   department: string;
+  status: string;
 }
 
 interface EmployeeCardProps {
   employee: Employee;
+  onViewDetails: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
-export const EmployeeCard: React.FC<EmployeeCardProps> = ({ employee }) => {
-  const router = useRouter();
+export const EmployeeCard: React.FC<EmployeeCardProps> = ({ employee, onViewDetails, onDelete }) => {
   const hireDate = new Date(employee.hireDate);
   const today = new Date();
   
@@ -26,22 +26,10 @@ export const EmployeeCard: React.FC<EmployeeCardProps> = ({ employee }) => {
 
   const tenure = `${years}y ${months}m ${days}d`;
 
-  const handleClick = (e: React.MouseEvent) => {
-    router.push(`/employee/${employee.id}`);
-  };
-
   return (
     <div className="rounded-lg border border-gray-200 p-4 shadow-sm">
       <div className="flex items-center space-x-4">
-        <div className="relative h-16 w-16">
-          <Image
-            src={employee.imageUrl}
-            alt={employee.fullName}
-            fill
-            sizes="(max-width: 64px) 100vw, 64px"
-            className="rounded-full object-cover"
-          />
-        </div>
+        <Avatar fullName={employee.fullName} status={employee.status} imageUrl="/imgs/profile.jpeg" />
         <div className="flex-1">
           <h3 className="text-lg font-semibold">{employee.fullName} <span className="text-sm text-gray-500">({employee.department})</span></h3>
           <div className="mt-1 text-sm text-gray-500">
@@ -53,7 +41,10 @@ export const EmployeeCard: React.FC<EmployeeCardProps> = ({ employee }) => {
           <Button
             variant="primary"
             className="mt-2"
-            onClick={handleClick}
+            onClick={(e) => {
+              e.stopPropagation();
+              onViewDetails(employee.id);
+            }}
           >
             View Details
           </Button>
@@ -61,10 +52,8 @@ export const EmployeeCard: React.FC<EmployeeCardProps> = ({ employee }) => {
             variant="secondary" 
             className="mt-2"
             onClick={(e) => {
-              e.preventDefault();
               e.stopPropagation();
-              // Handle close action
-              console.log('Delete clicked');
+              onDelete(employee.id);
             }}
           >
             Delete
