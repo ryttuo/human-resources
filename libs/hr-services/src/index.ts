@@ -1,1 +1,2 @@
-export * from './lib/api.services';
+export * from './lib/employee.service';
+export * from './lib/departments.service';

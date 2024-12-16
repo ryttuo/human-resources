@@ -5,7 +5,7 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-import { ApiService } from '@hr-app/hr-services';
+import { DepartmentsService } from '@hr-app/hr-services';
 import { Department } from '@hr-app/shared-types';
 
 export interface AppState {
@@ -21,12 +21,12 @@ const AppStateContext = createContext<AppState | undefined>(undefined);
 export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(false);
-  const apiService = new ApiService();
+  const departmentsService = new DepartmentsService();
 
   const fetchDepartments = useCallback(async () => {
     try {
       setLoading(true);
-      const departmentsData = await apiService.getDepartments();
+      const departmentsData = await departmentsService.getDepartments();
       setDepartments(departmentsData);
     } catch (error) {
       console.error('Error fetching departments:', error);

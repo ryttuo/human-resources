@@ -2,9 +2,9 @@
 
 import { Button, EmployeeCard, Modal, Title } from '@hr-app/hr-ui';
 import { useEffect, useState } from 'react';
-import { ApiService } from '@hr-app/hr-services';
+import { EmployeeService } from '@hr-app/hr-services';
 import { useRouter } from 'next/navigation';
-import { Employee, Department } from '@hr-app/shared-types';
+import { Employee } from '@hr-app/shared-types';
 import { useAppState } from '../context/appStateContext';
 
 export default function EmployeesPage() {
@@ -12,7 +12,7 @@ export default function EmployeesPage() {
   const { departments } = useAppState();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
-  const apiService = new ApiService();
+  const employeeService = new EmployeeService();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState<Omit<Employee, 'id'>>({
     first_name: '',
@@ -43,7 +43,7 @@ export default function EmployeesPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const employeesData = await apiService.getEmployees();
+        const employeesData = await employeeService.getEmployees();
         setEmployees(employeesData);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -69,9 +69,9 @@ export default function EmployeesPage() {
 
   const handleSubmit = async () => {
     try {
-      await apiService.createEmployee({ ...formData, status: 'ACTIVE' });
+      await employeeService.createEmployee({ ...formData, status: 'ACTIVE' });
       setIsModalOpen(false);
-      const employeesData = await apiService.getEmployees();
+      const employeesData = await employeeService.getEmployees();
       setEmployees(employeesData);
     } catch (error) {
       console.error('Error adding employee:', error);
@@ -136,8 +136,8 @@ export default function EmployeesPage() {
                   if (!confirmed) return;
 
                   try {
-                    await apiService.deleteEmployee(employee.id);
-                    const employeesData = await apiService.getEmployees();
+                    await employeeService.deleteEmployee(employee.id);
+                    const employeesData = await employeeService.getEmployees();
                     setEmployees(employeesData);
                   } catch (error) {
                     console.error('Error deleting employee:', error);

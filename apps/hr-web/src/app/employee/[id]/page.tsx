@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ApiService } from '@hr-app/hr-services';
+import { EmployeeService } from '@hr-app/hr-services';
 import { Button, Avatar, Title } from '@hr-app/hr-ui';
 import { useRouter } from 'next/navigation';
 import { Employee, DepartmentHistory } from '@hr-app/shared-types';
@@ -18,15 +18,15 @@ export default function EmployeePage({ params }: { params: { id: string } }) {
   >([]);
   const [loading, setLoading] = useState(true);
   const [selectedDepartment, setSelectedDepartment] = useState('');
-  const apiService = new ApiService();
+  const employeeService = new EmployeeService();
   const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [employeeData, historyData] = await Promise.all([
-          apiService.getEmployee(id),
-          apiService.getDepartmentHistory(id),
+          employeeService.getEmployee(id),
+          employeeService.getDepartmentHistory(id),
         ]);
 
         setEmployee(employeeData);
@@ -46,10 +46,10 @@ export default function EmployeePage({ params }: { params: { id: string } }) {
     if (!employee || selectedDepartment === employee.department_id) return;
 
     try {
-      const updatedEmployee = await apiService.updateEmployee(id, {
+      const updatedEmployee = await employeeService.updateEmployee(id, {
         department_id: selectedDepartment,
       });
-      const newHistory = await apiService.getDepartmentHistory(id);
+      const newHistory = await employeeService.getDepartmentHistory(id);
 
       setEmployee(updatedEmployee);
       setDepartmentHistory(newHistory);
@@ -63,7 +63,7 @@ export default function EmployeePage({ params }: { params: { id: string } }) {
 
     try {
       const newStatus = employee.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
-      const updatedEmployee = await apiService.updateEmployee(id, {
+      const updatedEmployee = await employeeService.updateEmployee(id, {
         status: newStatus,
       });
       setEmployee(updatedEmployee);
