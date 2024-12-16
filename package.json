@@ -2,6 +2,9 @@
   "name": "@hr-app/source",
   "version": "0.0.0",
   "license": "MIT",
+  "engines": {
+    "node": "18.20.0"
+  },
   "scripts": {
     "start:api": "nx run hr-api:serve",
     "start:web": "nx run hr-web:dev"
@@ -20,6 +23,7 @@
     "prisma": "^6.0.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-loading-skeleton": "^3.5.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0"
   },

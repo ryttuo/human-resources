@@ -5,10 +5,13 @@ import { useEffect, useState } from 'react';
 import { ApiService } from '@hr-app/hr-services';
 import { useRouter } from 'next/navigation';
 import { Employee, Department } from '@hr-app/shared-types';
+import { useAppState } from '../context/appStateContext';
 
 export default function EmployeesPage() {
   const router = useRouter();
+  const { departments } = useAppState();
   const [employees, setEmployees] = useState<Employee[]>([]);
+  const [loading, setLoading] = useState(true);
   const apiService = new ApiService();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState<Omit<Employee, 'id'>>({
@@ -23,8 +26,6 @@ export default function EmployeesPage() {
       name: '',
     },
   });
-
-  const [departments, setDepartments] = useState<Department[]>([]);
 
   const clearForm = () => {
     setFormData({
@@ -42,14 +43,12 @@ export default function EmployeesPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [employeesData, departmentsData] = await Promise.all([
-          apiService.getEmployees(),
-          apiService.getDepartments(),
-        ]);
+        const employeesData = await apiService.getEmployees();
         setEmployees(employeesData);
-        setDepartments(departmentsData);
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -99,36 +98,55 @@ export default function EmployeesPage() {
           </Button>
         </div>
         <div className="flex flex-col justify-center gap-4">
-          {employees.map((employee) => (
-            <EmployeeCard
-              key={employee.id}
-              employee={{
-                id: employee.id,
-                fullName: `${employee.first_name} ${employee.last_name}`,
-                hireDate: new Date(employee.hire_date).toISOString(),
-                department: employee.departments.name,
-                status: employee.status,
-              }}
-              onViewDetails={() => {
-                router.push(`/employee/${employee.id}`);
-              }}
-              onDelete={async () => {
-                const confirmed = window.confirm(
-                  `Are you sure you want to delete ${employee.first_name} ${employee.last_name}?`
-                );
-                if (!confirmed) return;
+          {loading ? (
+            // Skeleton loading state
+            Array.from({ length: 10 }).map((_, index) => (
+              <EmployeeCard
+                key={`skeleton-${index}`}
+                loading={true}
+                employee={{
+                  id: '',
+                  fullName: '',
+                  hireDate: '',
+                  department: '',
+                  status: 'ACTIVE'
+                }}
+                onViewDetails={() => {}}
+                onDelete={() => {}}
+              />
+            ))
+          ) : (
+            employees.map((employee) => (
+              <EmployeeCard
+                key={employee.id}
+                employee={{
+                  id: employee.id,
+                  fullName: `${employee.first_name} ${employee.last_name}`,
+                  hireDate: new Date(employee.hire_date).toISOString(),
+                  department: employee.departments.name,
+                  status: employee.status,
+                }}
+                onViewDetails={() => {
+                  router.push(`/employee/${employee.id}`);
+                }}
+                onDelete={async () => {
+                  const confirmed = window.confirm(
+                    `Are you sure you want to delete ${employee.first_name} ${employee.last_name}?`
+                  );
+                  if (!confirmed) return;
 
-                try {
-                  await apiService.deleteEmployee(employee.id);
-                  const employeesData = await apiService.getEmployees();
-                  setEmployees(employeesData);
-                } catch (error) {
-                  console.error('Error deleting employee:', error);
-                  alert('Failed to delete employee. Please try again.');
-                }
-              }}
-            />
-          ))}
+                  try {
+                    await apiService.deleteEmployee(employee.id);
+                    const employeesData = await apiService.getEmployees();
+                    setEmployees(employeesData);
+                  } catch (error) {
+                    console.error('Error deleting employee:', error);
+                    alert('Failed to delete employee. Please try again.');
+                  }
+                }}
+              />
+            ))
+          )}
         </div>
       </section>
 
