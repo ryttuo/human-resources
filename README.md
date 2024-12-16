@@ -6,18 +6,58 @@
 
 [Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/node?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
 
+## Dependencies
+
+- node 18
+- npx
+- docker
+
+
 ## Run tasks
 
 To run the dev server for your app, use:
 
+### hr-api (hr-api backend)
+
 ```sh
-npx nx serve hr-api
+npm run start:web-api
 ```
 
-To create a production bundle:
+### hr-web (hr-web frontend)
 
 ```sh
-npx nx build hr-api
+npm run start:web
+```
+
+### hr-web-test (hr-web unit tests)
+
+```sh
+npm run start:web-test  
+```
+
+### hr-web-e2e (hr-web e2e tests)
+
+```sh
+npm run start:web-e2e
+```
+
+### docker with postgreSQL (run db locally)
+
+```sh
+docker run --name my-postgres -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin -d -p 5432:5432 postgres
+
+user: admin
+password: admin
+```
+
+## Initialize setup and running localhost app
+
+```sh
+npm install (install dependencies   )
+npx prisma migrate dev --name init (create migrations)
+npm run start:seed (seed db)
+npm run start:web-api (run backend)
+npm run start:web (run frontend)
 ```
 
 To see all available targets to run for a project, run:
@@ -25,6 +65,35 @@ To see all available targets to run for a project, run:
 ```sh
 npx nx show project hr-api
 ```
+
+```sh 
+npx nx show project hr-web
+```
+
+```sh
+npx nx show project hr-web-e2e
+```
+
+#hr-app summary mono repo
+
+apps:
+
+- hr-api (nestjs 10, prisma)
+- hr-web (nextjs 14, context api for state management)
+- hr-web-e2e (playwright)
+
+libs:
+
+- hr-services (front-end http request services, axios)
+- hr-ui (ui components, react-loading-skeleton)
+- shared-type (typescript interfaces for be and fe)
+
+database:
+
+- postgreSQL (database)
+- prisma (ORM and migrations)
+- docker (run db locally)
+
 
 These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
 
