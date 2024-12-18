@@ -9,7 +9,8 @@
     "start:web-api": "nx run hr-api:serve",
     "start:web": "nx run hr-web:dev",
     "start:web-test": "nx test hr-web",
-    "start:web-e2e": "nx e2e hr-web-e2e"
+    "start:web-e2e": "nx e2e hr-web-e2e",
+    "start:seed": "ts-node prisma/seed.mjs"
   },
   "private": true,
   "dependencies": {
